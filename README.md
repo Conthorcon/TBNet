@@ -63,7 +63,7 @@ The experiments for training TBNet were conducted under the following settings:
 
 - Environment: Kaggle
 
-- Hardware: NVIDIA GPU
+- Hardware: NVIDIA GPU P10
 
 - Epochs: 200
 
@@ -131,5 +131,6 @@ Thanks the authors of previous works for providing code implementations that fac
 [2] [CGCOD: Class-Guided Camouflaged Object Detection](https://github.com/bbdjj/CGCOD), ACMMM2025.
 
 [3] [Boundary-Guided Camouflaged Object Detection](https://github.com/thograce/BGNet), IJCAI 2022.
+
 
 [4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
