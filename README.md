@@ -142,6 +142,7 @@ Thanks the authors of previous works for providing code implementations that fac
 [3] [Boundary-Guided Camouflaged Object Detection](https://github.com/thograce/BGNet), IJCAI 2022.
 
 
-[4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
+[4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020.
+
 
 
