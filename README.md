@@ -93,8 +93,14 @@ In practice, the segmentation results of TBNet exhibit more stable and coherent 
 
 ## Environment Settings
 
-Before running the code, please install 
+Before running the code, please install the required dependencies:
 
+    conda create -n tbnet python=3.10
+
+    conda activate tbnet
+    
+    pip install -r requirement.txt
+    
 ## Training
 
 For the training process, run:
@@ -137,4 +143,5 @@ Thanks the authors of previous works for providing code implementations that fac
 
 
 [4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
+
 
