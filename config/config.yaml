@@ -1,0 +1,52 @@
+DATA:
+  train_root: D:/Project/forjob/hard_detect/dataset/Train
+  test_root: D:/Project/forjob/hard_detect/dataset/Test
+  val_root: D:/Project/forjob/hard_detect/dataset/Test/CAMO
+  dataset: CODtraindataset
+  model_save_path: pretrain/metapara_noattr_3_1_50/
+  save_map: True
+  map_save_path: exp/
+  exp_name: metapara_noattr_3_1_50
+  test_dataset: ['CAMO', 'COD10K', 'NC4K']
+  model: SINet
+  input_size: 352
+
+TRAIN:
+  # Training Setting
+  workers: 4  # data loader workersfor feature in vis_features:
+  workers_val: 4
+  epochs: 1
+  milestones: [150]
+  start_epoch: 0
+  batch_size: 12  # batch size for training
+  batch_size_val: 1  # batch size for validation during training, use 1 for metric compatibale consideration
+  base_lr: 0.0001
+  lr_decay: 0.2
+  lr_multi: 0.1
+  weight_decay: 0.
+  max_norm: 0.
+  manual_seed: 0
+  print_freq: 100
+  projector_dim: 512
+  cc_weight: 0.5
+  kl_weight: 1
+  consistency_weight: 0.2
+
+  # Resume & Save
+  weight:  # path to initial weight (default: none)
+  resume:  # path to latest checkpoint (default: none)
+  evaluate: True  # evaluate on validation set, extra gpu memory needed and small batch_size_val is recommend
+  clean_cache: False  # clean cache after each epoch
+
+Distributed:
+  dist_url: tcp://localhost:3681
+  dist_backend: 'nccl'
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+
+TEST:
+  test_split: val-test
+  visualize: True
+  save_fix : False
+  save_fix_attr : False

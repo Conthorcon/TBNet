@@ -1,0 +1,44 @@
+DATA:
+  train_root: D:/Project/forjob/camo_detect/dataset/Train/ACUMEN
+  test_root: D:/Project/forjob/camo_detect/dataset/Test/
+  val_root: D:/Project/forjob/camo_detect/dataset/Test/CAMO
+  dataset: CODtraindataset
+  model_save_path: pretrain/metapara_noattr_3_1_50/
+  save_map: True
+  map_save_path: exp/
+  exp_name: metapara_noattr_3_1_50
+  # test_dataset: ['CAMO', 'COD10K', 'NC4K']
+  test_dataset: ['CHAMELEON']
+  # test_dataset: ['back_match','complex_back','corner_pos','dis_color','mimicry','occlusion','salient','small_obj']
+  # test_dataset: ['small_obj']
+
+TRAIN:
+  model: TBNet
+  input_size: 448
+  # Training Setting
+  workers: 4  # data loader workersfor feature in vis_features:
+  workers_val: 4
+  epochs: 1
+  milestones: [150]
+  start_epoch: 0
+  batch_size: 12  # batch size for training
+  batch_size_val: 1  # batch size for validation during training, use 1 for metric compatibale consideration
+  base_lr: 0.0001
+  lr_decay: 0.2
+  lr_multi: 0.1
+  weight_decay: 0.
+  max_norm: 0.
+  manual_seed: 0
+  print_freq: 100
+
+  # Resume & Save
+  weight:  # path to initial weight (default: none)
+  resume:  # path to latest checkpoint (default: none)
+  evaluate: True  # evaluate on validation set, extra gpu memory needed and small batch_size_val is recommend
+  clean_cache: False  # clean cache after each epoch
+
+TEST:
+  test_split: val-test
+  visualize: True
+  save_fix : False
+  save_fix_attr : False
