@@ -74,6 +74,8 @@ The experiments for training TBNet were conducted under the following settings:
 In addition, we evaluated and collected results from 20 representative methods for the camouflaged object detection (COD) task. TBNet achieves Top-3 performance on the CHAMELEON dataset, while its performance slightly decreases on the remaining two datasets, COD10K and CAMO.
 <p align='center'>
     <img src='asset/quantitative.png'>
+</p>
+<p align='center'>
     <em>
     Results of camouflaged object detection models from 2021 to 2025. The reported results are collected from published papers, while additional results are obtained through our own inference.
     </em>
