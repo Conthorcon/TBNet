@@ -63,7 +63,7 @@ The experiments for training TBNet were conducted under the following settings:
 
 - Environment: Kaggle
 
-- Hardware: NVIDIA GPU P10
+- Hardware: NVIDIA GPU P100
 
 - Epochs: 200
 
@@ -143,6 +143,7 @@ Thanks the authors of previous works for providing code implementations that fac
 
 
 [4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020.
+
 
 
 
