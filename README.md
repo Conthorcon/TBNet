@@ -83,9 +83,10 @@ In practice, the segmentation results of TBNet exhibit more stable and coherent 
 
 <p align='center'>
     <img src='asset/qualitative.png'>
-    <em>
+    
+  <em>
     Segmentation maps produced by camouflaged object detection methods.
-    </em>
+  </em>
 </p>
 
 ## Environment Settings
@@ -134,3 +135,4 @@ Thanks the authors of previous works for providing code implementations that fac
 
 
 [4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
+
