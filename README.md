@@ -91,6 +91,14 @@ In practice, the segmentation results of TBNet exhibit more stable and coherent 
   </em>
 </p>
 
+<p align='center'>
+    <img src='asset/success_cases.jpg'>
+    
+  <em>
+    Success cases where the camouflaged object exhibits thin, uninterrupted edges.
+  </em>
+</p>
+
 ## Environment Settings
 
 Before running the code, please install the required dependencies:
