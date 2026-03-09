@@ -1,55 +1,144 @@
-  #  Virtual Try-On (CP-VTON + MV-VTON) on Google Cloud
+  #  Text and Boundary Network for Camouflaged Object Detection
 
-> Updated Date: 3/7/2026
+> **Author:** 
+> Truong Tran Phuong Khanh
 
-## TODO
+  ## TBNet Overview
 
-- [x] Preprocess data using OpenPose and human parsing
-- [x] Integrate the CP-VTON model for the cloth warping stage
-- [x] Integrate the MV-VTON (Frontal View) model for the try-on stage
-- [ ] Deploy the Virtual Try-On system on Google Cloud
+Inspired by early works that leverage boundary cues to enhance segmentation quality, and motivated by the recent success of **Vision–Language Models (VLMs)** in semantic object localization, we propose **TBNet (Text and Boundary Network)**.
 
-## Setup
+TBNet is designed to address the challenge of accurately localizing camouflaged objects using high-level semantic guidance from VLMs, while simultaneously improving segmentation quality through effective exploitation of object boundary cues. To this end, the proposed model adopts a **parallel architecture** consisting of two complementary branches: a **text–image branch** that extracts semantic representations guided by a VLM, and a **boundary-aware visual branch** that focuses on capturing fine-grained image features with particular attention to object boundaries.
 
-    pip install -r requirements.txt
-
-Place checkpoints in directory:
-
-    --ckpt
-      --GMM
-      --openpose
-      --MVTON
-      --humanparsing
-
-- Openpose:
-
-- Human-parser
-
-- MV-VTON:
-
-- CP-VTON (GMM):
-
-The checkpoints can be obtained from the reference repositories.
-
-
-## Deploy Local Website
-
-    python app.py
+The features extracted from these two branches are progressively integrated through multiple **Multi-Head Cross-Attention (MHCA)** layers, which facilitate effective cross-modal interaction by emphasizing informative cues while suppressing irrelevant or noisy features, thereby enabling more accurate and robust segmentation of camouflaged objects.
 
 <p align='center'>
-    <img src='asset/ui.png'>
+    <img src='asset/TBNet.png'>
     <em>
-    Simple user interface for Virtual Try-On.
+    Overall architecture of the proposed TBNet. The model consists of a visual–textual branch and a visual–boundary branch.
     </em>
 </p>
 
-This repository includes a Dockerfile for deployment on Google Cloud.
+## CAMOClass Dataset
 
-## Reference
+The model is trained on the CAMOClass dataset, which is organized following the folder structure adopted in [CGCOD](https://arxiv.org/pdf/2412.18977). Specifically, CAMOClass is constructed from the COD10K-Train and CAMO++-Train subsets, where images are grouped into class-specific folders corresponding to different camouflaged object categories. Each folder contains images featuring the associated camouflaged object class.
 
-[1] [MV-VTON: Multi-View Virtual Try-On with Diffusion Models](https://github.com/hywang2002/MV-VTON), AAAI 2025.
+    dataset
+        --train
+            --Imgs
+                --Ant
+                --Bat
+                ...
+            --GT
+                --Ant
+                --Bat
+                ...
+        --test
+            --CAMO
+                --Imgs
+                --GT
+            --COD10K
+                --Imgs
+                --GT
+            --CHAMELEON
+                --Imgs
+                --GT
 
-[2] [IDM-VTON: Improving Diffusion Models for Authentic Virtual Try-on in the Wild](https://github.com/yisol/IDM-VTON), ECCV 2024.
+To facilitate semantic learning, the prompts used for CLIP training incorporate a dynamic class token derived from the folder name of each image. This design enables the model to effectively exploit class-level semantic information and enhances its ability to distinguish camouflaged objects based on textual guidance.
+
+The prompt templates used for both training and evaluation are selected based on the prompt effectiveness analysis reported in [OVCAMO](https://arxiv.org/pdf/2311.11241). As shown in their comparative study, CLIP demonstrates strong performance in camouflaged object classification when guided by the simple yet effective prompt **“a photo of the camouflaged \<class>”**, which is therefore adopted as the default prompt during the training of TBNet.
+
+During the testing phase, we further simplify the textual input by using a class-agnostic prompt, “a photo of the camouflaged object”, without observing any noticeable degradation in performance. This indicates that TBNet primarily relies on the learned visual–semantic alignment during training, while maintaining robustness to generic textual descriptions at inference time.
+
+## Experiments
+
+The experiments for training TBNet were conducted under the following settings:
+
+- Backbone: 
+    - CLIP@ViT-B/14 pretrained by OpenAI
+    - Res2Net50 pretrained with ImageNet
+
+- Framework: Pytorch.
+
+- Python: >= 3.10
+
+- Environment: Kaggle
+
+- Hardware: NVIDIA GPU
+
+- Epochs: 200
+
+- Learning rate: $5 \times 10^{-5}$
+
+- Batch size: 4
+
+In addition, we evaluated and collected results from 20 representative methods for the camouflaged object detection (COD) task. TBNet achieves Top-3 performance on the CHAMELEON dataset, while its performance slightly decreases on the remaining two datasets, COD10K and CAMO.
+<p align='center'>
+    <img src='asset/quantitative.png'>
+</p>
+<p align='center'>
+    <em>
+    Results of camouflaged object detection models from 2021 to 2025. The reported results are collected from published papers, while additional results are obtained through our own inference.
+    </em>
+</p>
 
 
-[3] [CP-VTON+: Clothing Shape and Texture Preserving Image-Based Virtual Try-On](https://github.com/minar09/cp-vton-plus), CVPRW 2020.
+In practice, the segmentation results of TBNet exhibit more stable and coherent segmented regions compared to other models, even when achieving higher accuracy. However, the model still tends to misclassify regions adjacent to camouflaged objects, indicating remaining challenges in precisely distinguishing object boundaries from surrounding background.
+
+<p align='center'>
+    <img src='asset/qualitative.png'>
+    <em>
+    Segmentation maps produced by camouflaged object detection methods.
+    </em>
+</p>
+
+## Environment Settings
+
+Before running the code, please install the required dependencies:
+
+    conda create -n tbnet python=3.10
+
+    conda activate tbnet
+    
+    pip install -r requirement.txt
+
+## Training
+
+For the training process, run:
+
+    python train.py --config 'config/TBNet.yaml'
+
+## Testing
+
+Puth the pretrained backbone [here](https://drive.google.com/drive/folders/13djzd6dCaLzdKjPP9FGjFpSEhzOkQ5xU?usp=sharing).
+
+    --pretrain
+        res2net50_v1b_26w_4s-3cf99910.pth
+        ViT-L-14-336px.pt
+
+Put the pretrained checkpoint [here](https://drive.google.com/drive/folders/12t6rQWtBo5DIZA-dm5rqwbT_Vntc3vd5?usp=sharing).
+
+    --exp
+        --metapara_noattr_3_1_50
+            TBNet.pth
+And run:
+
+    python test.py --config config/TBNet.yaml
+
+This repository supports three additional methods (ACUMEN, BGNet, and SINetv1).
+To evaluate a specific method, place its checkpoint in `./exp/metapara_noattr_3_1_50` and run:
+
+(P.S. Checkpoints are available via the links in the Related Works section below.)
+
+    python test.py --config config/SINet.yaml
+
+## Related Works
+
+Thanks the authors of previous works for providing code implementations that facilitated this project.
+
+[1] [Unlocking Attributes' Contribution to Successful Camouflage: A Combined Textual and Visual Analysis Strategy](https://github.com/lyu-yx/ACUMEN), ECCV 2024.
+
+[2] [CGCOD: Class-Guided Camouflaged Object Detection](https://github.com/bbdjj/CGCOD), ACMMM2025.
+
+[3] [Boundary-Guided Camouflaged Object Detection](https://github.com/thograce/BGNet), IJCAI 2022.
+
+[4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
