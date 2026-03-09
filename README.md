@@ -63,7 +63,7 @@ The experiments for training TBNet were conducted under the following settings:
 
 - Environment: Kaggle
 
-- Hardware: NVIDIA GPU
+- Hardware: NVIDIA GPU P100
 
 - Epochs: 200
 
@@ -81,14 +81,22 @@ In addition, we evaluated and collected results from 20 representative methods f
     </em>
 </p>
 
-
 In practice, the segmentation results of TBNet exhibit more stable and coherent segmented regions compared to other models, even when achieving higher accuracy. However, the model still tends to misclassify regions adjacent to camouflaged objects, indicating remaining challenges in precisely distinguishing object boundaries from surrounding background.
 
 <p align='center'>
     <img src='asset/qualitative.png'>
-    <em>
+    
+  <em>
     Segmentation maps produced by camouflaged object detection methods.
-    </em>
+  </em>
+</p>
+
+<p align='center'>
+    <img src='asset/success_cases.jpg'>
+    
+  <em>
+    Success cases where the camouflaged object exhibits thin, uninterrupted edges.
+  </em>
 </p>
 
 ## Environment Settings
@@ -100,7 +108,7 @@ Before running the code, please install the required dependencies:
     conda activate tbnet
     
     pip install -r requirement.txt
-
+    
 ## Training
 
 For the training process, run:
@@ -141,4 +149,9 @@ Thanks the authors of previous works for providing code implementations that fac
 
 [3] [Boundary-Guided Camouflaged Object Detection](https://github.com/thograce/BGNet), IJCAI 2022.
 
-[4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020
+
+[4] [Camouflaged Object Detection](https://github.com/DengPingFan/SINet), CVPR2020.
+
+
+
+
